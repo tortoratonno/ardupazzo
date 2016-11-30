@@ -1,3 +1,8 @@
+#include <SevenSegmentDisplay.h>
+
+#include <SwitchButton.h>
+
+
 /*!
  * \file QuadriDigit.ino
  * \brief demo for four 7-segement displays with common cathode.
@@ -20,9 +25,8 @@
  *   - Pin dp to digital pin  9
  */
 
-#include <SevenSegmentDisplay.h>
 #include "pitches.h"
-#include "SwitchButton.h"
+// #include "SwitchButton.h"
 
 
 SwitchButton buzzBtn(A3);
@@ -60,15 +64,12 @@ void loop() {
   
   sbuzzerazzizza();
 
-  if (startBtn.getState() > 700 ) {
+  if (startBtn.getCurrentState() > 700 ) {
     play = true;
     showTime(99);
     finalTheme();
   }
 
-
-
-  
 }
 
 void showTime(unsigned i){
@@ -76,13 +77,13 @@ void showTime(unsigned i){
     ss.print(i, 1, 100);
 //    sbuzzerazzizza();
     setBtn.updateMe();
-    if (setBtn.getState() > 700){
+    if (setBtn.getCurrentState() > 700){
       play = false;
-      delay(5 0);
+      delay(50);
         do{
           ss.print(i, 1, 100);
           setBtn.updateMe();
-          if (setBtn.getState() > 700){
+          if (setBtn.getCurrentState() > 700){
             play = true;
             delay(50);
           }
@@ -101,7 +102,7 @@ void finalTheme(){
 }
 
 void sbuzzerazzizza(){
-  if (buzzBtn.getState() > 0) {
+  if (buzzBtn.getCurrentState() > 0) {
     int noteDuration = 1000 / noteDurations[1];
     tone(buzzerPin, melody[0], noteDuration);
     }
