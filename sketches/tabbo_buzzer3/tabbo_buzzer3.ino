@@ -25,9 +25,9 @@
 #include "SwitchButton.h"
 
 
-SwitchButton buzzBtn(A3);
+SwitchButton buzzBtn(A0);
 SwitchButton startBtn(A1);
-SwitchButton setBtn(A0);  
+SwitchButton setBtn(A2);  
                             
 const int buzzerPin = 2;
 bool play = false;
@@ -74,19 +74,19 @@ void loop() {
 void showTime(unsigned i){
   do {
     ss.print(i, 1, 100);
-//    sbuzzerazzizza();
+    sbuzzerazzizza();
     setBtn.updateMe();
     if (setBtn.getState() > 700){
       play = false;
-      delay(5 0);
-        do{
-          ss.print(i, 1, 100);
-          setBtn.updateMe();
-          if (setBtn.getState() > 700){
-            play = true;
-            delay(50);
-          }
-        } while (play == false);       
+      delay(50);
+      do{
+        ss.print(i, 1, 100);
+        setBtn.updateMe();
+        if (setBtn.getState() > 700){
+          play = true;
+          delay(50);
+        }
+      } while (play == false);       
     }
   } while (i--);
 }
@@ -101,7 +101,7 @@ void finalTheme(){
 }
 
 void sbuzzerazzizza(){
-  if (buzzBtn.getState() > 0) {
+  if (buzzBtn.getState() > 50) {
     int noteDuration = 1000 / noteDurations[1];
     tone(buzzerPin, melody[0], noteDuration);
     }
