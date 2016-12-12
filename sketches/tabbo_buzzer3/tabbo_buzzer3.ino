@@ -1,15 +1,9 @@
 #include <SevenSegmentDisplay.h>
-
+#include "pitches.h"
 #include <SwitchButton.h>
 
 
-/*!
- * \file QuadriDigit.ino
- * \brief demo for four 7-segement displays with common cathode.
- * \author Like Ma <likemartinma@gmail.com>
- * 
- * This sketch counts down from 9999 to 0, while each value keeps displaying for 2 seconds.
-
+/*
  * The circuit:
  *   - Pin d1 to digital pin  4
  *   - Pin d2 to digital pin 13
@@ -25,16 +19,24 @@
  *   - Pin dp to digital pin  9
  */
 
-#include "pitches.h"
-// #include "SwitchButton.h"
-
-
 SwitchButton buzzBtn(A0);
 SwitchButton startBtn(A1);
 SwitchButton setBtn(A2);  
                             
 const int buzzerPin = 2;
 bool play = false;
+
+// IMPERIAL MARCH START
+
+int melodyImperial[] = {
+  NOTE_G3, NOTE_G3, NOTE_G3, NOTE_DS3, NOTE_AS4, NOTE_G3, NOTE_DS3, NOTE_AS4, NOTE_G3
+};
+
+int noteDurationsImperial[] = {
+  2, 2, 2, 3, 8, 2, 3, 8, 2
+};                                                                // note durations: 4 = quarter note, 8 = eighth note, etc.:
+
+// IMPERIAL MARCH END
 
 int melody[] = {
   NOTE_C4, NOTE_G3, NOTE_G3, NOTE_A3, NOTE_G3, 0, NOTE_B3, NOTE_C4
@@ -66,8 +68,8 @@ void loop() {
 
   if (startBtn.getCurrentState() > 700 ) {
     play = true;
-    showTime(99);
-    finalTheme();
+    showTime(9);
+    finalTheme(melodyImperial, noteDurationsImperial);
   }
 
 }
@@ -92,10 +94,10 @@ void showTime(unsigned i){
   } while (i--);
 }
 
-void finalTheme(){
-  for (int thisNote = 0; thisNote < 8; thisNote++) {
-    int noteDuration = 1000 / noteDurations[thisNote];          //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
-    tone(buzzerPin, melody[thisNote], noteDuration);
+void finalTheme(int melodyArg[], int noteDurationsArg[]){
+  for (int thisNote = 0; thisNote < 9; thisNote++) {
+    int noteDuration = 1000 / noteDurationsArg[thisNote];          //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
+    tone(buzzerPin, melodyArg[thisNote], noteDuration);
     int pauseBetweenNotes = noteDuration * 1.30;
     delay(pauseBetweenNotes);
   }
