@@ -22,9 +22,12 @@
 SwitchButton buzzBtn(A0);
 SwitchButton startBtn(A1);
 SwitchButton setBtn(A2);  
-                            
+SwitchButton pulsanto(A5);  
+
 const int buzzerPin = 2;
+
 bool play = false;
+short int durataShow;
 
 // IMPERIAL MARCH START
 
@@ -50,12 +53,29 @@ SevenSegmentDisplay<true, QuadriDigit<4, 13, 3, 1> > ss(11, 10, 8, 6, 5, 12, 7, 
 
 void setup() {
   //Serial.begin(9600);
-
+  durataShow = 99;
 }
 
 void loop() {
-  
   updateBtn();  
+  sbuzzerazzizza();
+    
+  if (startBtn.pressed() == true) {
+    play = true;
+    showTime(durataShow);
+    finalTheme(melodyImperial, noteDurationsImperial);
+  }
+
+
+
+
+
+
+}
+
+
+
+
 
 /*
     Serial.println("dopo update");
@@ -63,39 +83,50 @@ void loop() {
     Serial.println(startBtn.getState());
     Serial.println(setBtn.getState());
 */
-  
-  sbuzzerazzizza();
 
-  if (startBtn.getCurrentState() > 700 ) {
-    play = true;
-    showTime(9);
-    finalTheme(melodyImperial, noteDurationsImperial);
-  }
 
+
+
+void showTimeII(unsigned i){
+  do {
+    ss.print(i, 100);
+  } while (i--);
 }
+
+
+
 
 void showTime(unsigned i){
   do {
     ss.print(i, 1, 100);
     sbuzzerazzizza();
-    setBtn.updateMe();
-    if (setBtn.getCurrentState() > 700){
+    if (startBtn.pressed() == true){
       play = false;
-      delay(50);
         do{
           ss.print(i, 1, 100);
-          setBtn.updateMe();
-          if (setBtn.getCurrentState() > 700){
+          if (startBtn.pressed() == true){
             play = true;
-            delay(50);
           }
         } while (play == false);       
     }
   } while (i--);
+  ss.clear();
 }
 
 void finalTheme(int melodyArg[], int noteDurationsArg[]){
   for (int thisNote = 0; thisNote < 9; thisNote++) {
+    ss.print(8888, 2, 10);
+    ss.clear();
+    int noteDuration = 1000 / noteDurationsArg[thisNote];          //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
+    tone(buzzerPin, melodyArg[thisNote], noteDuration);
+    int pauseBetweenNotes = noteDuration * 1.30;
+    delay(pauseBetweenNotes);
+  }
+}
+void finalThemeORIG(int melodyArg[], int noteDurationsArg[]){
+  for (int thisNote = 0; thisNote < 9; thisNote++) {
+    ss.print(8888, 2, 10);
+    ss.clear();
     int noteDuration = 1000 / noteDurationsArg[thisNote];          //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
     tone(buzzerPin, melodyArg[thisNote], noteDuration);
     int pauseBetweenNotes = noteDuration * 1.30;
@@ -104,7 +135,7 @@ void finalTheme(int melodyArg[], int noteDurationsArg[]){
 }
 
 void sbuzzerazzizza(){
-  if (buzzBtn.getCurrentState() > 50) {
+  if (pulsanto.getCurrentState() > 300) {
     int noteDuration = 1000 / noteDurations[1];
     tone(buzzerPin, melody[0], noteDuration);
     }
@@ -118,5 +149,10 @@ void updateBtn() {
   buzzBtn.updateMe();
   startBtn.updateMe();
   setBtn.updateMe();
+  pulsanto.updateMe();
+}
+
+void setTime() {
+  ss.print(12, 2, 10000);
 }
 
