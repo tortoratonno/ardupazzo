@@ -33,7 +33,7 @@ struct SegmentTrait;
 
 template <>
 struct SegmentTrait <true> {
-	static byte digit[10];
+	static byte digit[12];
 };
 
 byte SegmentTrait<true>::digit[] = {
@@ -47,11 +47,13 @@ byte SegmentTrait<true>::digit[] = {
 	DIGIT_DEF(0, 0, 0, 1, 1, 1, 1),
 	DIGIT_DEF(0, 0, 0, 0, 0, 0, 0),
 	DIGIT_DEF(0, 0, 0, 0, 1, 0, 0),
+	DIGIT_DEF(1, 1, 1, 1, 1, 1, 0),
+	DIGIT_DEF(1, 1, 1, 0, 0, 0, 0),
 };
 
 template <>
 struct SegmentTrait <false> {
-	static byte digit[10];
+	static byte digit[12];
 };
 
 byte SegmentTrait<false>::digit[] = {
@@ -65,6 +67,8 @@ byte SegmentTrait<false>::digit[] = {
 	DIGIT_DEF(1, 1, 1, 0, 0, 0, 0),
 	DIGIT_DEF(1, 1, 1, 1, 1, 1, 1),
 	DIGIT_DEF(1, 1, 1, 1, 0, 1, 1),
+	DIGIT_DEF(0, 0, 0, 0, 0, 0, 1),
+	DIGIT_DEF(0, 0, 0, 1, 1, 1, 1),
 };
 
 template <boolean ANODE, typename DIGITS, unsigned DELAY>
@@ -158,6 +162,29 @@ void SevenSegmentDisplay<ANODE, DIGITS, DELAY>::print(float n, unsigned long dur
 			printFloat(n);
 		}
 	}
+}
+
+template <boolean ANODE, typename DIGITS, unsigned DELAY>
+void SevenSegmentDisplay<ANODE, DIGITS, DELAY>::printChar(unsigned n, byte pt, unsigned long duration)
+{
+		if (duration) {
+			unsigned long endTime = millis() + duration;
+			while (millis () < endTime) 
+
+			{
+			
+				for (byte i = 0; i < DIGITS::N; ++i) {
+					pickDigit(i);
+					//printDigit(n % 10, dp == i);
+					delay(DELAY / DIGITS::N);
+					n /= 10;
+				}
+			}
+
+		} else {
+			printUnsigned(n, pt);
+		}
+
 }
 
 template <boolean ANODE, typename DIGITS, unsigned DELAY>
