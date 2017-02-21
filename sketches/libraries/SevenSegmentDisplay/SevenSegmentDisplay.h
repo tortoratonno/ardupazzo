@@ -74,8 +74,7 @@ public:
 	void print(float n, unsigned long duration = 0);
 
 	//STOCAZZO
-	void printChar(unsigned n, byte pt, unsigned long duration);
-
+	void print(char c[4], byte pt = -1, unsigned long duration = 0);
 	
 	/*!
 	 * \brief light off all segments.
@@ -85,7 +84,9 @@ protected:
 	void pickDigit(byte i);
 	void printDigit(byte n, bool dp = false);
 	void printUnsigned(unsigned n, byte dp);
+	void printSingleChar(char c, bool dp);
 	void printFloat(float n);
+	void printChar(char c[4], byte dp);
 	
 	enum { 
 		MAX_SEGMENTS = 8,
@@ -93,7 +94,7 @@ protected:
 	};
 
 	byte pin_[MAX_SEGMENTS];
-	byte digit_[12];
+	byte digit_[40];
 };
 
 #include "SevenSegmentDisplay.inl"
